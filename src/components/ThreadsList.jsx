@@ -1,54 +1,50 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const StyledThreadList = styled.section`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 30px;
-
-    h2 {
-        margin: 30px;
-    }
-
-    ul {
-        max-width: 500px;
-        width: 100%;
-        list-style: none;
-    }
+const StyledThreadsList = styled.ul`
+    max-width: 500px;
+    width: 100%;
+    list-style: none;
 
     li {
+        text-align: center;
         padding: 15px;
         border: 3px solid lightgreen;
-        border-radius: 10px
-    }
+        border-radius: 10px;
 
-    li:not(:last-child) {
-        margin-bottom: 15px;
+        &:not(:last-child) {
+            margin-bottom: 15px;
+        }
     }
 `;
 
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: #000;
+`;
+
 export const ThreadsList = () => {
-    const [threadList, setThreadList] = useState([]);
+    const [threadsList, setThreadsList] = useState([]);
     
     useEffect(() => {
         axios.get(`https://2y6i6tqn41.execute-api.ap-northeast-1.amazonaws.com/threads`)
         .then(res => {
-            setThreadList(res.data);
+            setThreadsList(res.data);
+        })
+        .catch(err => {
+            console.log(err);
         })
     }, [])
 
     return (
-        <StyledThreadList>
-            <h2>スレッド一覧</h2>
-            <ul>
-                {threadList.map((thread) => {
-                    return (
-                        <li key={thread.id}>{thread.title}</li>
-                    )
-                })}
-            </ul>
-        </StyledThreadList>
+        <StyledThreadsList>
+            {threadsList.map((thread) => {
+                return (
+                    <li key={thread.id} id={thread.id}><StyledLink to={"/thread/" + thread.id + "?title=" + thread.title}>{thread.title}</StyledLink></li>
+                )
+            })}
+        </StyledThreadsList>
     )
 }

@@ -1,9 +1,14 @@
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import { ThreadsList } from './components/ThreadsList';
+import { Header } from './components/Header';
+import { Router } from './components/Router';
 
 function App() {
   return (
-    <ThreadsList />
+    <BrowserRouter>
+      <Header />
+      <Router />
+    </BrowserRouter>
   );
 }
 
